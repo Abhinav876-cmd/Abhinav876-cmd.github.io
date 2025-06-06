@@ -24,7 +24,7 @@ const showregister=()=>{
     root.innerHTML=str
 }
 const showwelcome=()=>{
-    let str=`
+    let str=`   
     <div class="App-container">
     <h1>WELCOME</h1>
     <p> you are successfully logged in.</p>
