@@ -1,34 +1,99 @@
-const showlogin=()=>{
-    let str=`
-    <div class="App-container">
+const users = [];
+let user={}
+const showLogin = () => {
+  let str = `
+    <div>
     <h1>Login Form</h1>
-    <p><input type="text" id="TxtEmail"></p>
-    <p><input type="password" id="TxtPass"></p>
-    <p><button onclick='showwelcome()'>Log In</button></p>
-    <p><button onclick='showregister()'>create Account </p>
-    
+    <p><div id="dvMsg"></div></p>
+    <p><input type="text" id="txtEmail"></p>
+    <p><input type="password" id="txtPass"></p>
+    <p><button onclick='validateUser()'>Log In</button></p>
+    <p><button onclick='showRegister()'>Create Account</button></p>
     </div>
-    
-    `
-    root.innerHTML=str
-}
-const showregister=()=>{
-    let str=`
+    `;
+  root.innerHTML = str;
+};
+
+const showRegister = () => {
+  let str = `
     <h1>Register Form</h1>
-    <p><input type="text" id="TxtName"></p>
-    <p><input type="text" id="TxtEmail"></p>
-    <p><input type="password" id="TxtPass"></p>
-    <p><button onclick='showlogin()'> Register </button>
-    <p><button onclick='showlogin()'> Already have an account </button>
-    `
-    root.innerHTML=str
-}
-const showwelcome=()=>{
-    let str=`   
-    <div class="App-container">
-    <h1>WELCOME</h1>
-    <p> you are successfully logged in.</p>
-    </div>
-    `
-    root.innerHTML=str
-}
+    <p><input type="text" id="txtName"></p>
+     <p><input type="text" id="txtEmail"></p>
+    <p><input type="password" id="txtPass"></p>
+    <button onclick='addUser()'>Register</button>
+    <hr>
+    <button onClick='showLogin()'>Alread a Member? Login here...</button>
+    `;
+  root.innerHTML = str;
+};
+
+const add = () => {
+  const type = document.querySelector("select").value;
+  const amount = Number(document.getElementById("txtAmount").value);
+
+  if (type == 1) {
+    // Deposit
+    user.balance += amount;
+  } else if (type == 2) {
+    // Withdraw
+    if (amount <= user.balance) {
+      user.balance -= amount;
+    } else {
+      alert("Insufficient balance!");
+      return;
+    }
+  } else {
+    alert("Please select a valid transaction type");
+    return;
+  }
+
+  // Refresh the home screen with updated balance
+  showHome();
+};
+
+
+const showHome = () => {
+  let str = `
+    <h1>Welcome ${user.name}</h1>
+    <hr>
+    <p><select>
+     <option value=0>--select--</option>
+      <option value=1>Deposit</option>
+      <option value=2>Withdraw</option>
+      </select></p>
+      <p>
+      <input type='number' id='txtAmount'>
+      </p>
+      <p><button onclick='add()'>Submit</button>
+
+    <button onclick='showLogin()'>Logout</button>
+    <hr>
+    
+    <p>Current balance:${user.balance}
+    `;
+  root.innerHTML = str;
+};
+
+const addUser = () => {
+  const obj = {
+    name: document.getElementById("txtName").value,
+    email: document.getElementById("txtEmail").value,
+    pass: document.getElementById("txtPass").value,
+    balance:0
+  };
+  users.push(obj);
+  showLogin();
+};
+
+const validateUser = () => {
+  let email = document.getElementById("txtEmail").value;
+  let pass = document.getElementById("txtPass").value;
+   user = users.find(
+    (e) => e.email === email && e.pass === pass
+  )
+  if (user) {
+    showHome();
+  } else {
+    dvMsg.innerHTML = "Access Denied";
+  }
+};
